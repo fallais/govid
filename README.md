@@ -16,7 +16,7 @@ The whole Covid QRCode system can be described as a PKI. The main component, cal
 
 Each state, which is called a **Member State**, maintains one or many **Country Signing Certificate Authority (CSCA)**, and has to publish the private keys used in the signing process to the DCCG.
 
-This CSCA issue **Document Signer Certificates (DSCs)**, these are public keys used by the **Document Signers**.
+This CSCA issue **Document Signer Certificates (DSCs)**, these are public keys used by the **Document Signers**. My guess is that what they call a Document Signer is a center of vaccination, or a pharmacy, etc.. To be verified.
 
 ![Coop](https://github.com/fallais/govid/blob/master/assets/mecanism_overview.png)
 

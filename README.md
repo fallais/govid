@@ -24,10 +24,8 @@ The DCC content start with `HC1:`.
 
 ### Business rules
 
-The DCC must then be validated against a lis of **Business Rules**. From what I understood by *reversing* the code of **TAC Verif (TousAntiCovid Verif)**, the application used by the people who verify your QRCode, use hard-coded rules.
+The DCC must then be validated against a list of **Business Rules**. These are based on **JsonLogic** (https://jsonlogic.com) which is called **CertLogic**. Guidelines can be [found here](ttps://github.com/eu-digital-green-certificates/dgc-business-rules-testdata).
 
-They can be found here : https://gitlab.inria.fr/tousanticovid-verif/tousanticovid-verif-android/-/blob/master/app/src/main/assets/sync/sync_rules.json
+From what I understood by *"reversing"* the code of **TAC Verif (TousAntiCovid Verif)**, the application used by the people who verify your QRCode, use [hard-coded rules](https://gitlab.inria.fr/tousanticovid-verif/tousanticovid-verif-android/-/blob/master/app/src/main/assets/sync/sync_rules.json).
 
-Again, they follow the recommandation of this repository : https://github.com/eu-digital-green-certificates/dgc-business-rules-testdata
-
-
+I expected that the rules should have been loaded when the mobile-app starts, but as of now, I can't confirm. That means that every changes of the governement rules implies a app update ?

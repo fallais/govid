@@ -10,9 +10,9 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:               "govid",
-	Short:             "Golang tool for Digital Covid Certificate (DCC)",
-	Run:               internal.Run,
+	Use:   "govid",
+	Short: "Golang tool for Digital Covid Certificate (DCC)",
+	Run:   internal.Run,
 }
 
 func Execute() {

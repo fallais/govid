@@ -5,7 +5,7 @@
 ## Usage
 
 ```go
-go run main.go decode -dcc myImage.png
+go run main.go decode --qrcode qrcode.png
 ```
 
 ## How the COVID QRCode works ?

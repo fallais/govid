@@ -8,10 +8,10 @@ import (
 
 var decoderCmd = &cobra.Command{
 	Use:   "decode",
-	Short: "Decode a Digital Covid Certificate (DCC)",
+	Short: "Decode a QRCode to get the Digital Covid Certificate (DCC)",
 	Run:   decoder.Run,
 }
 
 func init() {
-	decoderCmd.Flags().StringP("dcc", "d", "dcc.png", "Digital Covid Certificate")
+	decoderCmd.Flags().StringP("qrcode", "q", "assets/qrcodes/qrcode2.png", "QRCode")
 }

@@ -18,14 +18,14 @@ import (
 // Run is a convenient function for Cobra.
 func Run(cmd *cobra.Command, args []string) {
 	// Flags
-	dcc, err := cmd.Flags().GetString("dcc")
+	qrcode, err := cmd.Flags().GetString("qrcode")
 	if err != nil {
 		logrus.WithError(err).Fatalln("Error while getting flag")
 	}
 
 	// Read the DCC
 	// TODO: local or URL
-	data, err := ioutil.ReadFile(dcc)
+	data, err := ioutil.ReadFile(qrcode)
 	if err != nil {
 		logrus.WithError(err).Fatalln("Error while reading configuration file")
 	}

@@ -2,6 +2,12 @@
 
 **Golang** tool that decodes and validates the Covid QRCode, which is formerly called an **EU Digital COVID Certificate (EUDCC)** (previously a Digital Green Certificate...).
 
+## Usage
+
+```go
+go run main.go decode -dcc myImage.png
+```
+
 ## How the COVID QRCode works ?
 
 ### Overview of the mecansim
@@ -16,11 +22,9 @@ This CSCA issue **Document Signer Certificates (DSCs)**, these are public keys u
 
 ### The digital certificate
 
-As far as I understood, the schema of the DCC is defined by the EHN. You can find more information here : https://github.com/ehn-dcc-development/hcert-spec
+As far as I understood, the schema of the DCC is defined by the EHN. You can find [more information here](https://github.com/ehn-dcc-development/hcert-spec). The schema that seems to be used by all the *Member States* is located in [this repository](https://github.com/ehn-dcc-development/ehn-dcc-schema)
 
-The schema that seems to be used by all the Member States is located in this repository : https://github.com/ehn-dcc-development/ehn-dcc-schema
-
-The DCC content start with `HC1:`.
+Basically, the DCC is a QRCode, which wraps a CBOR Web Token (signed, so it is called a COSE), encoded in base45. Note that this encoded content starts with `HC1:` or `LT1:`.
 
 ### Business rules
 

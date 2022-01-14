@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"strings"
+	//"encoding/base64"
 
 	"github.com/fallais/govid/internal/cmd/decoder/models"
 
@@ -13,26 +14,45 @@ import (
 	"github.com/minvws/base45-go/eubase45"
 )
 
-func decode(cose string) (*models.UnverifiedCOSE, error) {
-	// Remove the prefix
-	coseWithoutPrefix, err := removePrefix(cose)
-	if err != nil {
-		return nil, err
+const Prefix = "HC1:"
+
+func NewDCCFromQRCode(data string) (*models.DigitalCovidCertificate, error) {
+	if !strings.HasPrefix(data, Prefix) {
+		return nil, fmt.Errorf("data does not start with `HC1:`")
 	}
 
+	// Remove the prefix
+	dataWithoutPrefix := strings.TrimPrefix(data, Prefix)
+
 	// Base45 decoding
-	coseCompressed, err := base45decode(coseWithoutPrefix)
+	decoded, err := eubase45.EUBase45Decode([]byte(dataWithoutPrefix))
 	if err != nil {
 		return nil, err
 	}
 
 	// Zlib decompressing
-	coseDecompressed, err := decompress(coseCompressed)
+	decompressed, err := decompress(decoded)
 	if err != nil {
 		return nil, err
 	}
 
-	return decodeCOSE(coseDecompressed)
+	// Unmarshal into a SignedCWT
+	var v SignedCWT
+	err = cbor.Unmarshal(decompressed, &v)
+	if err != nil {
+		return nil, fmt.Errorf("error while unmarshaling the SignedCWT: %v", err)
+	}
+
+	// Unmarshal the claims
+
+	// Unmarshal the claims
+	var c Claims
+	err = cbor.Unmarshal(v.Payload, &c)
+	if err != nil {
+		return nil, fmt.Errorf("error while unmarshaling the claims: %v", err)
+	}
+
+	return &c.HCert.DCC, nil
 }
 
 func decompress(compressed []byte) ([]byte, error) {
@@ -49,41 +69,4 @@ func decompress(compressed []byte) ([]byte, error) {
 	}
 
 	return buf.Bytes(), nil
-}
-
-func decodeCOSE(coseData []byte) (*models.UnverifiedCOSE, error) {
-	var v models.SignedCWT
-	if err := cbor.Unmarshal(coseData, &v); err != nil {
-		return nil, fmt.Errorf("cbor.Unmarshal: %v", err)
-	}
-
-	var p models.COSEHeader
-	if len(v.Protected) > 0 {
-		if err := cbor.Unmarshal(v.Protected, &p); err != nil {
-			return nil, fmt.Errorf("cbor.Unmarshal(v.Protected): %v", err)
-		}
-	}
-
-	var c models.Claims
-	if err := cbor.Unmarshal(v.Payload, &c); err != nil {
-		return nil, fmt.Errorf("cbor.Unmarshal(v.Payload): %v", err)
-	}
-
-	return &models.UnverifiedCOSE{
-		V:      v,
-		P:      p,
-		Claims: c,
-	}, nil
-}
-
-func base45decode(s string) ([]byte, error) {
-	return eubase45.EUBase45Decode([]byte(s))
-}
-
-func removePrefix(s string) (string, error) {
-	if !strings.HasPrefix(s, "HC1:") && !strings.HasPrefix(s, "LT1:") {
-		return "", fmt.Errorf("should start with HC1 or LT1")
-	}
-
-	return strings.TrimPrefix(strings.TrimPrefix(s, "HC1:"), "LT1:"), nil
 }

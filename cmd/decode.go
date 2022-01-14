@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/govid/internal/cmd/decoder"
+	"github.com/fallais/govid/internal/cmd/decoder"
 
 	"github.com/spf13/cobra"
 )

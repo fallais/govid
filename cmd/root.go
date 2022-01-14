@@ -1,10 +1,7 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
-
-	"github.com/fallais/govid/internal"
 
 	"github.com/spf13/cobra"
 )
@@ -12,12 +9,17 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "govid",
 	Short: "Golang tool for Digital Covid Certificate (DCC)",
-	Run:   internal.Run,
 }
 
+func init() {
+	rootCmd.AddCommand(decoderCmd)
+	//rootCmd.AddCommand(encoderCmd)
+}
+
+// Execute the root command.
 func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
+	err := rootCmd.Execute()
+	if err != nil {
 		os.Exit(1)
 	}
 }

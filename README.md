@@ -1,11 +1,22 @@
 # GoVID
 
-**Golang** tool that decodes and validates the Covid QRCode, which is formerly called an **EU Digital COVID Certificate (EUDCC)** (previously a Digital Green Certificate...).
+**Golang** tool that decodes and validates the Covid QRCode, which is formerly called an **EU Digital COVID Certificate (EUDCC)** (previously a Digital Green Certificate...). in France, it is called *Pass Sanitaire* (which has nothing to do with "Sanitaire" IMHO), at least the European name is honest.
+
+The aim of this tool/library is also to understand how it works behind the scenes (the QRCode, the verification, etc...).
 
 ## Usage
 
 ```go
-go run main.go decode --qrcode qrcode.png
+go build
+
+// Decode
+govid decode --qrcode qrcode.png
+
+// TODO : verify
+govid verify --qrcode qrcode.png
+
+// Not possible
+govid encode ...
 ```
 
 ## How the COVID QRCode works ?
